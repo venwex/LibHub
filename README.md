@@ -18,9 +18,9 @@ LibHub is a community-driven digital library where users can freely share and ac
 ---
 
 ## Features  
-✔ User authentication (JWT)  
-✔ Secure file uploads  
-✔ Book search & filtering  
-✔ Favorite books system 
-✔ Report system
-✔ Admin panel for content moderation  
+- User authentication (JWT)  
+- Secure file uploads  
+- Book search & filtering  
+- Favorite books system 
+- Report system
+- Admin panel for content moderation  
