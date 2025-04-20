@@ -1,13 +1,58 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Book } from '../models/book';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  // Mock data for testing - replace with actual API calls
+
+  private apiUrl = 'http://localhost:8000/api';
+
+  constructor(private http: HttpClient) {}
+
+  searchBooks(query: string): Observable<Book[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/books/search/?q=${encodeURIComponent(query)}`).pipe(
+      map(books => books.map(book => this.mapToBook(book)))
+    );
+  }
+
+  getBookById(id: number): Observable<Book> {
+    return this.http.get<any>(`${this.apiUrl}/books/${id}/`).pipe(
+      map(book => this.mapToBook(book))
+    );
+  }
+
+  getPopularBooks(): Observable<Book[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/books/popular/`).pipe(
+      map(books => books.map(book => this.mapToBook(book)))
+    );
+  }
+
+  private mapToBook(raw: any): Book {
+    return {
+      id: raw.id,
+      title: raw.title,
+      author: raw.author,
+      language: raw.language,
+      fileType: raw.file_type,
+      fileUrl: raw.file_url,
+      datePublished: new Date(raw.date_published),
+      dateUploaded: new Date(raw.date_uploaded),
+      rating: raw.rating,
+      coverImage: raw.coverImage,
+      genres: raw.genres,
+      description: raw.description,
+      pages: raw.pages,
+      isbn: raw.isbn
+    };
+  }
+}
+
+ /*
+  // Если вдруг понадобится тест без сервера — можно раскомментировать ↓↓↓
+
   private mockBooks: Book[] = [
     {
       id: 1,
@@ -41,8 +86,6 @@ export class BookService {
     }
   ];
 
-  constructor(private http: HttpClient) {}
-
   searchBooks(query: string): Observable<Book[]> {
     const term = query.toLowerCase();
     return of(
@@ -53,40 +96,12 @@ export class BookService {
     );
   }
 
-getBookById(id: number): Observable<Book> {
-  console.log('Getting book by ID:', id);
-  const book = this.mockBooks.find(b => b.id === id);
-  console.log('Found book:', book);
-  return book ? of(book) : throwError(() => new Error('Book not found'));
-}
+  getBookById(id: number): Observable<Book> {
+    const book = this.mockBooks.find(b => b.id === id);
+    return book ? of(book) : throwError(() => new Error('Book not found'));
+  }
 
   getPopularBooks(): Observable<Book[]> {
-    // Return sorted by rating
     return of([...this.mockBooks].sort((a, b) => b.rating - a.rating));
   }
-}
-
-/*
-export class BookService {
-  // !!!!!!!!!!!!!!!!!
-  // REALLY IMPORTANT: replace later with api url!!!!!
-  // !!!!!!!!!!!!!!!!!
-  private apiUrl = 'http://your-api-url.com/api';
-  // !!!!!!!!!!!!!!!!!
-  // !!!!!!!!!!!!!!!!!
-
-  constructor(private http: HttpClient) {}
-
-  searchBooks(query: string): Observable<Book[]> {
-    return this.http.get<Book[]>(`${this.apiUrl}/books/search?q=${encodeURIComponent(query)}`);
-  }
-
-  getBookById(id: number): Observable<Book> {
-    return this.http.get<Book>(`${this.apiUrl}/books/${id}`);
-  }
-
-  getPopularBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(`${this.apiUrl}/books/popular`);
-  }
-}
-*/
+  */
