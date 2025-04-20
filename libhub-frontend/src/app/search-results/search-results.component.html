@@ -1,0 +1,33 @@
+
+    <div class="search-section">
+        <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Enter title..."
+            (keyup.enter)="onSearch()">
+        <button (click)="onSearch()">Search</button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">Loading...</div>
+
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+    <h2>Search Results for "{{ searchQuery }}"</h2>
+
+    <div *ngIf="books.length === 0 && !isLoading" class="no-results">
+      No books found matching your search.
+    </div>
+
+    <div class="book-list">
+        <div *ngFor="let book of books" class="book-card" (click)="viewBookDetails(book.id)">
+            <img [src]="book.coverImage || 'assets/default-book-cover.jpg'" [alt]="book.title">
+            <div class="book-info">
+                <h3>{{ book.title }}</h3>
+                <p>by {{ book.author }}</p>
+                <div class="genres">
+                    <span *ngFor="let genre of book.genres" class="genre-tag">{{ genre }}</span>
+                </div>
+                <div class="rating">Rating: {{ book.rating }}/5</div>
+            </div>
+        </div>
+    </div>

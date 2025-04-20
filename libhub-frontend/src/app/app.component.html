@@ -1,0 +1,12 @@
+<!-- app.component.html -->
+<div id="container">
+    <!-- Persistent Navigation Bar -->
+    <div class="topnav">
+        <a routerLink="/" [class.active]="isActive('/')">Home</a>
+        <a routerLink="/about" [class.active]="isActive('/about')">About Us</a>
+        <a routerLink="/books" [class.active]="isActive('/books')">Browse Books</a>
+    </div>
+
+    <!-- Dynamic Content -->
+    <router-outlet></router-outlet>
+</div>

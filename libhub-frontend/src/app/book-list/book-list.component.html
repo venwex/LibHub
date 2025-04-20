@@ -1,0 +1,11 @@
+<h2>All Books</h2>
+
+<div *ngIf="isLoading" class="loading">Loading books...</div>
+
+<div class="book-grid">
+    <div *ngFor="let book of books" div class="book-card" [routerLink]="'/books/' + book.id">
+        <img [src]="book.coverImage || 'assets/default-book-cover.jpg'" [alt]="book.title">
+        <h3>{{ book.title }}</h3>
+        <p>{{ book.author }}</p>
+    </div>
+</div>

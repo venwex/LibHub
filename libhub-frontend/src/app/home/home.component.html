@@ -1,0 +1,11 @@
+<h1>LibHub</h1>
+<p>The place where a bookworm's dreams come true...</p>
+
+<div class="search-section">
+    <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Enter title..."
+        (keyup.enter)="onSearch()">
+    <button (click)="onSearch()">Search</button>
+</div>

@@ -1,0 +1,10 @@
+#team-intro-container {
+    border-radius: 5px;
+    margin: auto;
+    width: 80%;
+    padding: 5%;
+    align-self: center;
+    -webkit-box-shadow: 0px 4px 11px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 4px 11px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 4px 11px 0px rgba(34, 60, 80, 0.2);
+}

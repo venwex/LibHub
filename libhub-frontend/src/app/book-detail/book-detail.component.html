@@ -1,0 +1,30 @@
+<div class="book-detail-container">
+    <div class="book-cover">
+      <img [src]="book?.coverImage || 'assets/default-book-cover.jpg'" [alt]="book?.title">
+    </div>
+
+    <div class="book-info">
+      <h1>{{ book?.title }}</h1>
+      <h2>by {{ book?.author }}</h2>
+
+      <div class="meta">
+        <span class="rating">★ {{ book?.rating || 'N/A' }}</span>
+        <span>{{ book?.language }}</span>
+        <span *ngIf="book?.pages">{{ book?.pages }} pages</span>
+      </div>
+
+      <div class="genres">
+        <span *ngFor="let genre of book?.genres" class="genre-tag">{{ genre }}</span>
+      </div>
+
+      <p class="description">{{ book?.description || 'No description available' }}</p>
+
+      <div class="actions">
+        <button class="download-btn">Download ({{ book?.fileType }})</button>
+      </div>
+    </div>
+</div>
+
+<div *ngIf="!book && !isLoading" class="not-found">
+    Book not found
+</div>
