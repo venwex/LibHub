@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../services/book.service';
 import { Book } from '../models/book';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-results',
@@ -12,11 +13,12 @@ import { Book } from '../models/book';
   templateUrl: './search-results.component.html',
   styleUrls: ['./search-results.component.css']
 })
-export class SearchResultsComponent implements OnInit {
+export class SearchResultsComponent implements OnInit, OnDestroy {
   books: Book[] = [];
   searchQuery: string = '';
   isLoading: boolean = false;
   errorMessage: string = '';
+  routeSub!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -25,17 +27,21 @@ export class SearchResultsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.searchQuery = params['query'] || '';
+    this.routeSub = this.route.paramMap.subscribe((params: ParamMap) => {
+      this.searchQuery = params.get('query') || '';
       if (this.searchQuery) {
         this.performSearch();
+      } else {
+        this.books = [];
+        this.errorMessage = 'No search query provided.';
       }
     });
   }
 
   onSearch() {
-    if (this.searchQuery.trim()) {
-      this.router.navigate(['/search', this.searchQuery.trim()]);
+    const trimmedQuery = this.searchQuery.trim();
+    if (trimmedQuery) {
+      this.router.navigate(['/search', trimmedQuery]);
     }
   }
 
@@ -58,5 +64,11 @@ export class SearchResultsComponent implements OnInit {
 
   viewBookDetails(bookId: number) {
     this.router.navigate(['/books', bookId]);
+  }
+
+  ngOnDestroy() {
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 }

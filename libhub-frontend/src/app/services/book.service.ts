@@ -13,9 +13,7 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   searchBooks(query: string): Observable<Book[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/books/search/?q=${encodeURIComponent(query)}`).pipe(
-      map(books => books.map(book => this.mapToBook(book)))
-    );
+    return this.http.get<Book[]>(`http://localhost:8000/api/search/${query}/`);
   }
 
   getBookById(id: number): Observable<Book> {
