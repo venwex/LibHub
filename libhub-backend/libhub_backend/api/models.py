@@ -27,7 +27,7 @@ class Book(models.Model):
         return self.title
 
 class CustomUser(AbstractUser):
-    books = models.ManyToManyField('Book', related_name='users', blank=True)
+    books = models.ManyToManyField('Book', related_name='users', blank=True) # many-to-many
 
     groups = models.ManyToManyField(
         'auth.Group', related_name='customuser_set', blank=True

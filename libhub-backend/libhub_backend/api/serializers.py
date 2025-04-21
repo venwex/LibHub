@@ -5,10 +5,31 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
-class GenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = '__all__'
+class GenreSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=50)
+
+    def create(self, validated_data):
+        return Genre.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()
+        return instance
+
+class BookCollectionSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    title = serializers.CharField(max_length=255)
+    cover_image = serializers.URLField()
+
+    def create(self, validated_data):
+        return Book.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        instance.cover_image = validated_data.get('cover_image', instance.cover_image)
+        instance.save()
+        return instance
 
 class BookSerializer(serializers.ModelSerializer):
     coverImage = serializers.CharField(source='cover_image', allow_null=True)
@@ -66,7 +87,3 @@ class RegisterSerializer(serializers.ModelSerializer):
             'refresh': str(refresh),
         }
 
-class BookCollectionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = ['id', 'title', 'cover_image']
