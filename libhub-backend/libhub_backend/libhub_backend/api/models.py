@@ -29,12 +29,8 @@ class Book(models.Model):
 class CustomUser(AbstractUser):
     books = models.ManyToManyField('Book', related_name='users', blank=True) # many-to-many
 
-    groups = models.ManyToManyField(
-        'auth.Group', related_name='customuser_set', blank=True
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission', related_name='customuser_permissions', blank=True
-    )
-
     def __str__(self):
         return self.username
+
+class BookTag(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
